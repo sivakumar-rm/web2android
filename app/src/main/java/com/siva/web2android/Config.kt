@@ -18,16 +18,6 @@ object Config {
 
     val locationAccessEnabled = true
 
-    val interstitialAdEnabled = true
-
-    val interstitialAdUnitId: String? = null
-
-    val interstitialAdOnPageLoad = true
-
-    val rewardedAdUnitId: String? = null
-
-    val rewardedAdEnabled = true
-
     val splashScreenEnabled = true
 
 }

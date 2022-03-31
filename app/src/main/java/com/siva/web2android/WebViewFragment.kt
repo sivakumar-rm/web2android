@@ -77,11 +77,6 @@ class WebViewFragment : Fragment() {
             if (view == webview) {
                 progress?.visibility = View.VISIBLE
             }
-            if (Config.interstitialAdEnabled && Config.interstitialAdUnitId != null && Config.interstitialAdOnPageLoad) {
-                view?.context?.let {
-                    Ads.showInterstitials(it as Activity, null)
-                }
-            }
         }
 
         override fun onPageFinished(view: WebView?, url: String?) {
@@ -376,102 +371,6 @@ class WebViewFragment : Fragment() {
     }
 
     inner class Js(private val webview: WebView) {
-
-        @JavascriptInterface
-        fun showInterstitials(result: String?, opened: String?, closed: String?,
-                              impression: String?, clicked: String?, leftApp: String?) {
-            val activity = this@WebViewFragment.activity
-            var r = false
-            if (activity != null) {
-                r = Ads.showInterstitials(activity, object : FullScreenContentCallback() {
-
-                    override fun onAdFailedToShowFullScreenContent(p0: AdError) {
-                        super.onAdFailedToShowFullScreenContent(p0)
-                    }
-
-                    override fun onAdShowedFullScreenContent() {
-                        webview.loadUrl("javascript:$opened();")
-                    }
-
-                    override fun onAdDismissedFullScreenContent() {
-                        webview.loadUrl("javascript:$closed();")
-                    }
-
-                    override fun onAdClicked() {
-                        webview.loadUrl("javascript:$clicked();")
-                    }
-
-                    override fun onAdImpression() {
-                        webview.loadUrl("javascript:$impression();")
-                    }
-
-                })
-            }
-            webview.loadUrl("javascript:$result($r);")
-        }
-
-        @JavascriptInterface
-        fun hasRewardedAd(callback: String?) {
-            val r = Ads.hasRewardedAd()
-            webview.loadUrl("javascript:$callback($r);")
-        }
-
-        @JavascriptInterface
-        fun showRewardedAd(result: String?, opened: String?, closed: String?,
-                            reward: String?, error: String?) {
-            val r: Boolean = activity?.let {
-
-                Ads.showRewardedAd(it, object: Ads.RewardedAdCallback() {
-
-                    override fun onAdFailedToShowFullScreenContent(err: AdError) {
-                        val code: String = when (err.code) {
-                            AdRequest.ERROR_CODE_NO_FILL,
-                            AdRequest.ERROR_CODE_MEDIATION_NO_FILL -> "no fill"
-                            AdRequest.ERROR_CODE_NETWORK_ERROR -> "network error"
-                            AdRequest.ERROR_CODE_INTERNAL_ERROR -> "internal error"
-                            AdRequest.ERROR_CODE_INVALID_REQUEST -> "invalid request"
-                            AdRequest.ERROR_CODE_APP_ID_MISSING -> "app id missing"
-                            else -> "unknown error"
-                        }
-                        webview.loadUrl("javascript:$error($code, ${err.message});")
-                    }
-
-                    override fun onAdShowedFullScreenContent() {
-                        webview.loadUrl("javascript:$opened();")
-                    }
-
-                    override fun onAdDismissedFullScreenContent() {
-                        webview.loadUrl("javascript:$closed();")
-                    }
-
-                    override fun onAdImpression() {
-                        super.onAdImpression()
-                    }
-
-                    override fun onAdClicked() {
-                        super.onAdClicked()
-                    }
-
-                    override fun onUserEarnedReward(item: RewardItem) {
-                        webview.loadUrl("javascript:$reward(${item.amount});")
-                    }
-
-                })
-
-            } ?: false
-
-            webview.loadUrl("javascript:$result($r);")
-        }
-
-        @JavascriptInterface
-        fun showBanner(callback: String?) {
-
-        }
-
-        @JavascriptInterface
-        fun hideBanner(callback: String?) {
-
-        }
 
     }
 
