@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Web 2 App</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="button_ok">OK</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_proceed">Proceed</string>
+    <string name="button_abort">Abort</string>
+</resources>
