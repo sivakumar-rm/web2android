@@ -10,7 +10,7 @@
 
 
 ## Configure
-Configure features in *Configure.kt* file.
+Configure features and set URL in *Configure.kt* file.
 
 
 
